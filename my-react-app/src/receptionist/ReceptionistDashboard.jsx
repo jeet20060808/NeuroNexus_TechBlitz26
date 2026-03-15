@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Trash2, X } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import Overview from './sections/Overview';
 import TodaysQueue from './sections/TodaysQueue';
 import RegisterNew from './sections/RegisterNew';
 import SearchPatient from './sections/SearchPatient';
 import RecordsHistory from './sections/RecordsHistory';
-import InsuranceBilling from './sections/InsuranceBilling';
 import BookAppointment from './sections/BookAppointment';
 import ViewSchedule from './sections/ViewSchedule';
 import Cancellations from './sections/Cancellations';
-import Reminders from './sections/Reminders';
 import Availability from './sections/Availability';
 import OnCallRoster from './sections/OnCallRoster';
-import Reports from './sections/Reports';
-import Settings from './sections/Settings';
 
-// Custom Hook for Local Storage
+// ... (Rest of useLocalStorage remains same)
 const useLocalStorage = (key, initialValue) => {
   const [storedValue, setStoredValue] = useState(() => {
     try {
@@ -112,24 +108,16 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
         return <SearchPatient patients={patients} handleDeletePatient={handleDeletePatient} />;
       case 'Records & History':
         return <RecordsHistory />;
-      case 'Insurance & Billing':
-        return <InsuranceBilling />;
       case 'Book Appointment':
         return <BookAppointment setCurrentTab={setCurrentTab} />;
       case 'View Schedule':
         return <ViewSchedule patients={patients} />;
       case 'Cancellations':
         return <Cancellations />;
-      case 'Reminders':
-        return <Reminders />;
       case 'Availability':
         return <Availability />;
       case 'On-Call Roster':
         return <OnCallRoster />;
-      case 'Reports':
-        return <Reports />;
-      case 'Settings':
-        return <Settings />;
       default:
         return <Overview patients={patients} doctorStatus={doctorStatus} />;
     }
@@ -161,7 +149,6 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
               {renderSidebarItem('Book Appointment', 'bg-gray-400')}
               {renderSidebarItem('View Schedule', 'bg-gray-400')}
               {renderSidebarItem('Cancellations', 'bg-red-400')}
-              {renderSidebarItem('Reminders', 'bg-gray-400')}
             </ul>
           </div>
           <div className="px-3 mb-6">
@@ -169,13 +156,6 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
             <ul>
               {renderSidebarItem('Availability', 'bg-gray-400')}
               {renderSidebarItem('On-Call Roster', 'bg-blue-400')}
-            </ul>
-          </div>
-          <div className="px-3 mb-6">
-            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-2 ml-2">Admin</p>
-            <ul>
-              {renderSidebarItem('Reports', 'bg-gray-400')}
-              {renderSidebarItem('Settings', 'bg-gray-400')}
             </ul>
           </div>
         </div>

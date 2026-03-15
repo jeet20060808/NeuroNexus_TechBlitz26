@@ -28,39 +28,6 @@ const RegisterNew = ({ registerForm, setRegisterForm, handleAddPatient, setCurre
                 className="w-full bg-[#EEF2F7]/50 border border-slate-200 rounded-xl px-4 py-2.5 text-[#1A3C40] outline-none focus:border-[#7C9070] transition-colors" 
               />
             </div>
-            <div>
-              <label className="block text-sm text-slate-600 mb-2 font-medium">Date of birth</label>
-              <input 
-                type="date" 
-                className="w-full bg-[#EEF2F7]/50 border border-slate-200 rounded-xl px-4 py-2.5 text-[#1A3C40] outline-none focus:border-[#7C9070] transition-colors" 
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-slate-600 mb-2 font-medium">Gender</label>
-              <select className="w-full bg-[#EEF2F7]/50 border border-slate-200 rounded-xl px-4 py-2.5 text-[#1A3C40] outline-none focus:border-[#7C9070] transition-colors">
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-[#7C9070]/10 pt-6">
-          <h3 className="text-[#1A3C40] font-semibold mb-4">Contact details</h3>
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm text-slate-600 mb-2 font-medium">Mobile number</label>
-              <input type="tel" className="w-full bg-[#EEF2F7]/50 border border-slate-200 rounded-xl px-4 py-2.5 text-[#1A3C40] outline-none focus:border-[#7C9070] transition-colors" />
-            </div>
-            <div>
-              <label className="block text-sm text-slate-600 mb-2 font-medium">Email address</label>
-              <input type="email" className="w-full bg-[#EEF2F7]/50 border border-slate-200 rounded-xl px-4 py-2.5 text-[#1A3C40] outline-none focus:border-[#7C9070] transition-colors" />
-            </div>
-            <div className="col-span-2">
-              <label className="block text-sm text-slate-600 mb-2 font-medium">Home address</label>
-              <input type="text" className="w-full bg-[#EEF2F7]/50 border border-slate-200 rounded-xl px-4 py-2.5 text-[#1A3C40] outline-none focus:border-[#7C9070] transition-colors" />
-            </div>
           </div>
         </div>
 
