@@ -6,16 +6,10 @@ import MyDashboard from './sections/MyDashboard';
 import TodaysPatients from './sections/TodaysPatients';
 import MySchedule from './sections/MySchedule';
 import PatientSearch from './sections/PatientSearch';
-import ActiveCases from './sections/ActiveCases';
-import CriticalICU from './sections/CriticalICU';
-import DischargeList from './sections/DischargeList';
 import WriteNotes from './sections/WriteNotes';
 import Prescriptions from './sections/Prescriptions';
-import PendingResults from './sections/PendingResults';
 import ReferralsSection from './sections/Referrals';
 import MedicalHistory from './sections/MedicalHistory';
-import Immunizations from './sections/Immunizations';
-import AllergiesAlerts from './sections/AllergiesAlerts';
 
 const DoctorDashboard = ({ user, onLogout }) => {
   const [currentTab, setCurrentTab] = useState('My dashboard');
@@ -55,22 +49,15 @@ const DoctorDashboard = ({ user, onLogout }) => {
       case "Today's patients": return <TodaysPatients />;
       case 'My schedule': return <MySchedule />;
       case 'Patient search': return <PatientSearch />;
-      case 'Active cases': return <ActiveCases />;
-      case 'Critical / ICU': return <CriticalICU />;
-      case 'Discharge list': return <DischargeList />;
       case 'Write notes': return <WriteNotes />;
       case 'Prescriptions': return <Prescriptions />;
-      case 'Lab & radiology': return <div className="p-8 text-center text-slate-500">Full lab & radiology results view</div>;
-      case 'Pending results': return <PendingResults />;
       case 'Referrals': return <ReferralsSection />;
       case 'Medical history': return <MedicalHistory />;
-      case 'Immunizations': return <Immunizations />;
-      case 'Allergies & alerts': return <AllergiesAlerts />;
       default: return (
         <div className="p-16 flex flex-col items-center justify-center text-center h-full">
            <Stethoscope size={48} className="text-slate-400 mb-4" />
            <h3 className="text-xl text-slate-700 font-medium mb-2">{currentTab}</h3>
-           <p className="text-slate-500 max-w-sm">This module is part of the clinical suite and can be integrated with your backend database.</p>
+           <p className="text-slate-500 max-w-sm">This module is part of the clinical suite and helps bridge communication between the receptionist and medical staff.</p>
         </div>
       );
     }

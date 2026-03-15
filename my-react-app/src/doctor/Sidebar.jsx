@@ -11,9 +11,6 @@ const NAV_GROUPS = [
     group: 'Patients',
     items: [
       { label: 'Patient search', dot: 'bg-gray-500' },
-      { label: 'Active cases', dot: 'bg-gray-500' },
-      { label: 'Critical / ICU', dot: 'bg-red-500' },
-      { label: 'Discharge list', dot: 'bg-gray-500' },
     ],
   },
   {
@@ -21,7 +18,6 @@ const NAV_GROUPS = [
     items: [
       { label: 'Write notes', dot: 'bg-gray-500' },
       { label: 'Prescriptions', dot: 'bg-gray-500' },
-      { label: 'Pending results', dot: 'bg-red-500' },
       { label: 'Referrals', dot: 'bg-gray-500' },
     ],
   },
@@ -29,8 +25,6 @@ const NAV_GROUPS = [
     group: 'Records',
     items: [
       { label: 'Medical history', dot: 'bg-gray-500' },
-      { label: 'Immunizations', dot: 'bg-gray-500' },
-      { label: 'Allergies & alerts', dot: 'bg-gray-500' },
     ],
   },
 ];
