@@ -94,7 +94,7 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
   const renderSidebarItem = (tabName, dotColor) => (
     <li 
       onClick={() => setCurrentTab(tabName)} 
-      className={`px-3 py-2 rounded-md cursor-pointer flex items-center gap-3 text-sm transition-colors ${currentTab === tabName ? 'bg-blue-100 text-slate-900' : 'text-slate-600 hover:bg-blue-100 hover:text-slate-900'}`}
+      className={`px-3 py-2 rounded-md cursor-pointer flex items-center gap-3 text-sm transition-colors ${currentTab === tabName ? 'bg-[#7C9070]/10 text-[#1A3C40] font-bold' : 'text-slate-600 hover:bg-[#7C9070]/5 hover:text-[#1A3C40]'}`}
     >
       <div className={`w-2 h-2 rounded-full ${dotColor}`}></div> {tabName}
     </li>
@@ -136,9 +136,9 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#3b82f633] text-slate-800 flex font-sans">
+    <div className="min-h-screen bg-[#EEF2F7] text-[#1A3C40] flex font-sans">
       {/* SIDEBAR */}
-      <aside className="w-64 bg-white h-screen fixed flex flex-col border-r border-[#3b82f633] z-20">
+      <aside className="w-64 bg-white h-screen fixed flex flex-col border-r border-[#7C9070]/20 z-20">
         <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden py-6">
           <div className="px-3 mb-6">
             <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-2 ml-2">Dashboard</p>
@@ -183,9 +183,9 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
 
       {/* MAIN CONTENT */}
       <main className="ml-64 flex-1 flex flex-col min-h-screen">
-        <header className="h-16 flex items-center justify-between px-8 border-b border-[#3b82f633] sticky top-0 bg-[#3b82f633] z-10">
+        <header className="h-16 flex items-center justify-between px-8 border-b border-[#7C9070]/20 sticky top-0 bg-white/80 backdrop-blur-md z-10">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-semibold text-slate-900">MediDesk — Reception</h1>
+            <h1 className="text-xl font-semibold text-slate-900">Healio — Reception</h1>
             <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">3 Urgent</span>
             <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Clinic Open</span>
           </div>

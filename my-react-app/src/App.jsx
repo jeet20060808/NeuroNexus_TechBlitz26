@@ -62,6 +62,15 @@ export default function ClinicApp() {
 
   return (
     <NotificationContext.Provider value={notification}>
+      <div className="fixed inset-0 -z-10 h-full w-full bg-white">
+        <div className="absolute inset-0 bg-slate-50 opacity-50">
+           <img 
+            src="/assets/abstract_bg.png" 
+            alt="background" 
+            className="w-full h-full object-cover mix-blend-multiply opacity-10"
+          />
+        </div>
+      </div>
       {/* Online Status Indicator */}
       {!isOnline && (
         <div className="fixed top-0 left-0 right-0 bg-red-600 text-white p-2 text-center text-xs font-bold z-[100]">

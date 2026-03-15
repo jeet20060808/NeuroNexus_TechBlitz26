@@ -30,22 +30,22 @@ const referrals = [
 ];
 
 const MyDashboard = () => (
-  <div className="p-8 max-w-[1400px] w-full grid grid-cols-12 gap-8">
+  <div className="p-8 max-w-[1400px] w-full grid grid-cols-12 gap-8 animate-in fade-in">
     <div className="col-span-8 space-y-8">
 
       {/* Patient Queue */}
-      <div className="bg-white rounded-xl border border-[#3b82f633] p-6">
+      <div className="bg-white rounded-[32px] border border-[#7C9070]/20 p-6 shadow-sm">
         <div className="flex justify-between items-center mb-5">
-          <h2 className="text-lg font-semibold text-slate-900">Patient Queue</h2>
-          <span className="text-xs text-slate-500 uppercase tracking-wider">Sort by urgency</span>
+          <h2 className="text-lg font-bold text-[#1A3C40]">Patient Queue</h2>
+          <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">Sort by urgency</span>
         </div>
         <div className="space-y-3">
           {patientQueue.map((p, i) => (
-            <div key={i} className="flex justify-between items-center p-3 rounded-lg border border-[#3b82f633] bg-[#3b82f611]/50 hover:bg-blue-100/50 transition-colors cursor-pointer group">
+            <div key={i} className="flex justify-between items-center p-3 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-[#7C9070]/5 transition-all cursor-pointer group">
               <div className="flex items-center gap-4">
-                <div className={`w-11 h-11 rounded-full ${p.avatarColor} flex items-center justify-center text-base font-bold`}>{p.initials}</div>
+                <div className={`w-11 h-11 rounded-full ${p.avatarColor} flex items-center justify-center text-base font-bold shadow-sm`}>{p.initials}</div>
                 <div>
-                  <p className="text-slate-900 font-medium text-sm group-hover:text-blue-400 transition-colors">{p.name}</p>
+                  <p className="text-[#1A3C40] font-bold text-sm group-hover:text-[#7C9070] transition-colors">{p.name}</p>
                   <p className="text-slate-500 text-xs mt-0.5">{p.details}</p>
                 </div>
               </div>
@@ -59,19 +59,19 @@ const MyDashboard = () => (
       </div>
 
       {/* Prescriptions */}
-      <div className="bg-white rounded-xl border border-[#3b82f633] p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">Recent prescriptions</h3>
+      <div className="bg-white rounded-[32px] border border-[#7C9070]/20 p-6 shadow-sm">
+        <h3 className="font-bold text-[#1A3C40] mb-4">Recent prescriptions</h3>
         <div className="grid grid-cols-2 gap-4">
           {prescriptions.map((pr, i) => (
-            <div key={i} className="p-4 rounded-xl bg-[#3b82f611] border border-[#3b82f633] hover:border-blue-200 transition-all">
+            <div key={i} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-[#7C9070]/30 transition-all shadow-sm">
               <div className="flex justify-between items-start mb-1">
-                <p className="text-slate-900 font-medium text-sm">{pr.drug}</p>
+                <p className="text-[#1A3C40] font-bold text-sm">{pr.drug}</p>
                 <Badge label={pr.status} />
               </div>
               <p className="text-slate-500 text-xs mb-2">{pr.patient}</p>
               <div className="flex items-center gap-2">
                 <div className={`w-1.5 h-1.5 rounded-full ${pr.dot}`} />
-                <p className="text-slate-600 text-[11px]">{pr.details}</p>
+                <p className="text-slate-600 text-[11px] font-medium">{pr.details}</p>
               </div>
             </div>
           ))}
@@ -81,11 +81,11 @@ const MyDashboard = () => (
 
     <div className="col-span-4 space-y-8">
       {/* Lab Results */}
-      <div className="bg-white rounded-xl border border-[#3b82f633] p-4">
-        <h3 className="font-semibold text-slate-900 mb-4">Lab & radiology results</h3>
+      <div className="bg-white rounded-[32px] border border-[#7C9070]/20 p-5 shadow-sm">
+        <h3 className="font-bold text-[#1A3C40] mb-4">Lab & radiology results</h3>
         <table className="w-full text-left">
           <thead>
-            <tr className="text-slate-500 text-xs border-b border-[#3b82f633]">
+            <tr className="text-slate-500 text-xs border-b border-slate-100">
               <th className="pb-2 font-medium">Patient</th>
               <th className="pb-2 font-medium">Test</th>
               <th className="pb-2 font-medium">Result</th>
@@ -94,12 +94,12 @@ const MyDashboard = () => (
           </thead>
           <tbody>
             {labs.map((l, i) => (
-              <tr key={i} className="border-b border-[#3b82f633]/40 last:border-0">
-                <td className="py-2 text-slate-700 text-xs pr-1">{l.patient}</td>
-                <td className="py-2 text-slate-600 text-xs pr-1">{l.test}</td>
-                <td className="py-2 text-slate-800 text-xs pr-1">{l.result}</td>
-                <td className="py-2 text-right">
-                  <span className={`${l.flagColor} text-[10px] px-2 py-0.5 rounded font-medium`}>{l.flag}</span>
+              <tr key={i} className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors">
+                <td className="py-2.5 text-slate-700 text-xs pr-1 font-medium">{l.patient}</td>
+                <td className="py-2.5 text-slate-600 text-xs pr-1">{l.test}</td>
+                <td className="py-2.5 text-[#1A3C40] text-xs pr-1 font-bold">{l.result}</td>
+                <td className="py-2.5 text-right">
+                  <span className={`${l.flagColor} text-[10px] px-2 py-0.5 rounded font-bold`}>{l.flag}</span>
                 </td>
               </tr>
             ))}
@@ -108,11 +108,11 @@ const MyDashboard = () => (
       </div>
 
       {/* Referrals */}
-      <div className="bg-white rounded-xl border border-[#3b82f633] p-4">
-        <h3 className="font-semibold text-slate-900 mb-4">Referrals</h3>
+      <div className="bg-white rounded-[32px] border border-[#7C9070]/20 p-5 shadow-sm">
+        <h3 className="font-bold text-[#1A3C40] mb-4">Referrals</h3>
         <table className="w-full text-left">
           <thead>
-            <tr className="text-slate-500 text-xs border-b border-[#3b82f633]">
+            <tr className="text-slate-500 text-xs border-b border-slate-100">
               <th className="pb-2 font-medium">Patient</th>
               <th className="pb-2 font-medium">Referred to</th>
               <th className="pb-2 font-medium">Reason</th>
@@ -120,10 +120,10 @@ const MyDashboard = () => (
           </thead>
           <tbody>
             {referrals.map((r, i) => (
-              <tr key={i} className="border-b border-[#3b82f633]/40 last:border-0">
-                <td className="py-2 text-slate-700 text-xs">{r.patient}</td>
-                <td className="py-2 text-slate-600 text-xs">{r.to}</td>
-                <td className="py-2 text-slate-600 text-xs truncate max-w-[80px]">{r.reason}</td>
+              <tr key={i} className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors">
+                <td className="py-2.5 text-slate-700 text-xs font-medium">{r.patient}</td>
+                <td className="py-2.5 text-slate-600 text-xs">{r.to}</td>
+                <td className="py-2.5 text-slate-500 text-xs truncate max-w-[100px]">{r.reason}</td>
               </tr>
             ))}
           </tbody>

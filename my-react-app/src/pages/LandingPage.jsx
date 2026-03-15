@@ -14,7 +14,7 @@ const useScrollAnimation = () => {
       },
       { threshold: 0.15 }
     );
-    document.querySelectorAll('.scroll-animate').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 };
@@ -97,7 +97,7 @@ const LandingPage = ({ onGetStarted }) => {
             <div className="w-10 h-10 bg-[#7C9070] rounded flex items-center justify-center text-white">
               <Stethoscope size={24} />
             </div>
-            <span className="text-2xl font-serif text-[#1A3C40]">Green Grove <span className="font-light text-slate-500 text-lg">Family Clinic</span></span>
+            <span className="text-2xl font-serif text-[#1A3C40]">Healio <span className="font-light text-slate-500 text-lg">Medical Center</span></span>
           </div>
 
           <div className="hidden md:flex items-center gap-8 font-medium text-sm text-[#1A3C40]">
@@ -150,8 +150,8 @@ const LandingPage = ({ onGetStarted }) => {
           <div className="relative scroll-animate-right delay-200">
             <div className="rounded-[40px] overflow-hidden shadow-2xl rounded-br-[120px]">
             <img
-              src="/assets/hero_clinic.png"
-              alt="Doctor and Patient"
+              src="/assets/hero_green_grove.png"
+              alt="Green Grove Clinic"
               className="w-full h-[600px] object-cover"
             />           
             </div>
@@ -191,7 +191,7 @@ const LandingPage = ({ onGetStarted }) => {
           <div className="scroll-animate-left relative">
             <div className="rounded-[40px] overflow-hidden shadow-xl">
               <img
-                src="/assets/clinic_interior.png"
+                src="/assets/interior_premium.png"
                 alt="Clinic Interior"
                 className="w-full h-[600px] object-cover"
               />
@@ -210,7 +210,7 @@ const LandingPage = ({ onGetStarted }) => {
               A clinic built on trust and compassion
             </h2>
             <p className="scroll-animate delay-200 text-slate-600 text-lg leading-relaxed">
-              Green Grove Family Clinic has been San Francisco's trusted healthcare partner since 1999. We combine modern medicine with a personal touch — treating every patient as family.
+              Healio Medical Center has been San Francisco's trusted healthcare partner since 1999. We combine modern medicine with a personal touch — treating every patient as family.
             </p>
             <p className="scroll-animate delay-300 text-slate-600 text-lg leading-relaxed">
               Our multidisciplinary team of over 40 specialists work together to deliver comprehensive, compassionate care at every stage of life.
@@ -273,19 +273,68 @@ const LandingPage = ({ onGetStarted }) => {
         <h2 className="scroll-animate delay-100 text-5xl font-serif mb-16 text-[#1A3C40]">Patient-centered care</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {[
-            { bg: 'bg-[#4A3728]', text: 'text-white', label: 'Holistic care', sub: 'Mind, body and spirit' },
-            { bg: 'bg-[#D9D9D9]', text: 'text-[#1A3C40]', label: 'Personalized plans', sub: 'Tailored to you' },
-            { bg: 'bg-[#8C9C92]', text: 'text-white', label: 'Experienced staff', sub: '40+ specialists' },
-            { bg: 'bg-[#E5E1DA]', text: 'text-[#1A3C40]', label: 'Advanced technology', sub: 'Modern equipment' },
-            { bg: 'bg-[#7C9070]', text: 'text-white', label: 'Family support', sub: 'Care for all ages' },
-            { bg: 'bg-[#F2E8DF]', text: 'text-[#1A3C40]', label: 'Online appointments', sub: 'Book anytime' },
+            { 
+              bg: 'bg-[#4A3728]', 
+              text: 'text-white', 
+              label: 'Holistic care', 
+              sub: 'Mind, body and spirit',
+              image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800'
+            },
+            { 
+              bg: 'bg-[#D9D9D9]', 
+              text: 'text-[#1A3C40]', 
+              label: 'Personalized plans', 
+              sub: 'Tailored to you',
+              image: 'https://images.unsplash.com/photo-1666886573531-48d2e3c2b684?auto=format&fit=crop&q=80&w=800'
+            },
+            { 
+              bg: 'bg-[#8C9C92]', 
+              text: 'text-white', 
+              label: 'Experienced staff', 
+              sub: '40+ specialists',
+              image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=800'
+            },
+            { 
+              bg: 'bg-[#E5E1DA]', 
+              text: 'text-[#1A3C40]', 
+              label: 'Advanced technology', 
+              sub: 'Modern equipment',
+              image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'
+            },
+            { 
+              bg: 'bg-[#7C9070]', 
+              text: 'text-white', 
+              label: 'Family support', 
+              sub: 'Care for all ages',
+              image: 'https://images.unsplash.com/photo-1758691462666-6470b740f544?auto=format&fit=crop&q=80&w=800'
+            },
+            { 
+              bg: 'bg-[#F2E8DF]', 
+              text: 'text-[#1A3C40]', 
+              label: 'Online appointments', 
+              sub: 'Book anytime',
+              image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800'
+            },
           ].map((card, i) => (
             <div
               key={i}
-              className={`scroll-animate delay-${Math.min(i * 100, 500)} card-hover ${card.bg} p-10 rounded-[40px] ${card.text} flex flex-col justify-end h-56`}
+              className={`scroll-animate delay-${Math.min(i * 100, 500)} card-hover relative overflow-hidden p-10 rounded-[40px] flex flex-col justify-end h-72 group`}
             >
-              <p className="text-2xl font-serif mb-1">{card.label}</p>
-              <p className="text-sm opacity-60">{card.sub}</p>
+              {/* Background Image with Overlay */}
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src={card.image} 
+                  alt={card.label}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className={`absolute inset-0 opacity-60 transition-opacity duration-300 group-hover:opacity-40 ${card.bg}`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="relative z-10">
+                <p className={`text-2xl font-serif mb-1 ${card.text !== 'text-white' ? 'group-hover:text-white' : 'text-white'} transition-colors duration-300`}>{card.label}</p>
+                <p className={`text-sm opacity-80 ${card.text !== 'text-white' ? 'group-hover:text-white/80' : 'text-white/80'} transition-colors duration-300`}>{card.sub}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -439,7 +488,7 @@ const LandingPage = ({ onGetStarted }) => {
                 <div className="w-8 h-8 bg-[#E7DCAC] rounded flex items-center justify-center text-[#1A3C40]">
                   <Stethoscope size={18} />
                 </div>
-                <span className="font-serif text-lg">Green Grove</span>
+                <span className="font-serif text-lg">Healio</span>
               </div>
               <p className="text-slate-400 text-sm leading-relaxed">
                 Compassionate, modern healthcare for every stage of life.
@@ -472,7 +521,7 @@ const LandingPage = ({ onGetStarted }) => {
             ))}
           </div>
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-slate-500 text-sm">© 2026 Green Grove Family Clinic. All rights reserved.</p>
+            <p className="text-slate-500 text-sm">© 2026 Healio Medical Center. All rights reserved.</p>
             <div className="flex gap-6">
               {['Privacy policy', 'Terms of use', 'Cookie settings'].map(link => (
                 <a key={link} href="#" className="text-slate-500 text-sm hover:text-white transition-colors">{link}</a>

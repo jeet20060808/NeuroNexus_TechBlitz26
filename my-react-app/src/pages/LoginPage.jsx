@@ -15,31 +15,42 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#3b82f633] font-sans flex items-center justify-center p-6 pb-20">
+    <div className="min-h-screen bg-[#EEF2F7] font-sans flex items-center justify-center p-6 pb-20">
       
       <div className="w-full max-w-7xl grid lg:grid-cols-2 gap-12 items-center bg-white rounded-[40px] shadow-xl overflow-hidden min-h-[700px]">
         
         {/* Left: Branding & Visual */}
-        <div className="bg-[#465b6f] p-16 text-white h-full hidden lg:flex flex-col justify-between">
-          <div className="flex items-center gap-3">
-             <div className="w-8 h-8 bg-[#E7DCAC] rounded flex items-center justify-center text-[#465b6f]">
-                <Stethoscope size={20} />
-             </div>
-             <span className="text-xl font-serif">Green Grove</span>
+        <div className="bg-[#465b6f] text-white h-full hidden lg:flex flex-col relative overflow-hidden">
+          {/* Background Image Overlay */}
+          <div className="absolute inset-0 opacity-40">
+            <img 
+              src="/assets/login_visual.png" 
+              alt="Healthcare Environment" 
+              className="w-full h-full object-cover"
+            />
           </div>
+          
+          <div className="relative z-10 p-16 h-full flex flex-col justify-between">
+            <div className="flex items-center gap-3">
+               <div className="w-8 h-8 bg-[#E7DCAC] rounded flex items-center justify-center text-[#465b6f]">
+                  <Stethoscope size={20} />
+               </div>
+               <span className="text-xl font-serif">Healio</span>
+            </div>
 
-          <div>
-             <h2 className="text-6xl font-serif mb-8 leading-tight">Your gateway to better healthcare management.</h2>
-             <p className="text-slate-300 text-lg max-w-sm">Join our network of healthcare professionals providing exceptional care.</p>
-          </div>
+            <div>
+               <h2 className="text-6xl font-serif mb-8 leading-tight">Your gateway to better healthcare management.</h2>
+               <p className="text-slate-300 text-lg max-w-sm">Join our network of healthcare professionals providing exceptional care.</p>
+            </div>
 
-          <div className="flex gap-4">
-             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                <span className="text-xs">FB</span>
-             </div>
-             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                <span className="text-xs">TW</span>
-             </div>
+            <div className="flex gap-4">
+               <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
+                  <span className="text-xs">FB</span>
+               </div>
+               <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
+                  <span className="text-xs">TW</span>
+               </div>
+            </div>
           </div>
         </div>
 
@@ -74,7 +85,7 @@ const LoginPage = ({ onLogin }) => {
                 <input 
                   type="email" 
                   required
-                  placeholder="name@greengrove.com"
+                  placeholder="name@healio.com"
                   className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 outline-none focus:border-[#7C9070] transition-colors"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}

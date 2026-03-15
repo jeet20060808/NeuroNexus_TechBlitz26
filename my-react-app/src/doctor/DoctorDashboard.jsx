@@ -77,7 +77,7 @@ const DoctorDashboard = ({ user, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#3b82f633] text-slate-800 flex font-sans">
+    <div className="min-h-screen bg-[#EEF2F7] text-[#1A3C40] flex font-sans">
       <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
       
       <main className="ml-64 flex-1 flex flex-col min-h-screen">
