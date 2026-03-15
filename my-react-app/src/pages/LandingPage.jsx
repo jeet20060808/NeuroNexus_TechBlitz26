@@ -8,14 +8,24 @@ const useScrollAnimation = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.05, rootMargin: '0px 0px -50px 0px' }
     );
-    document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    
+    const timeout = setTimeout(() => {
+      document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach((el) => {
+        observer.observe(el);
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout);
+      observer.disconnect();
+    };
   }, []);
 };
 
@@ -30,7 +40,7 @@ const LandingPage = ({ onGetStarted }) => {
           transform: translateY(40px);
           transition: opacity 0.7s ease, transform 0.7s ease;
         }
-        .scroll-animate.animate-in {
+        .scroll-animate.is-visible {
           opacity: 1;
           transform: translateY(0);
         }
@@ -39,7 +49,7 @@ const LandingPage = ({ onGetStarted }) => {
           transform: translateX(-40px);
           transition: opacity 0.7s ease, transform 0.7s ease;
         }
-        .scroll-animate-left.animate-in {
+        .scroll-animate-left.is-visible {
           opacity: 1;
           transform: translateX(0);
         }
@@ -48,7 +58,7 @@ const LandingPage = ({ onGetStarted }) => {
           transform: translateX(40px);
           transition: opacity 0.7s ease, transform 0.7s ease;
         }
-        .scroll-animate-right.animate-in {
+        .scroll-animate-right.is-visible {
           opacity: 1;
           transform: translateX(0);
         }
@@ -88,7 +98,7 @@ const LandingPage = ({ onGetStarted }) => {
         .float-anim { animation: float 4s ease-in-out infinite; }
       `}</style>
 
-    <div className="bg-[#EEF2F7] min-h-screen text-[#1A3C40] font-sans">
+    <div className="bg-[#79a8f566] min-h-screen text-[#1A3C40] font-sans">
 
       {/* ── NAVIGATION ── */}
       <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-slate-200">
@@ -114,9 +124,9 @@ const LandingPage = ({ onGetStarted }) => {
             </div>
             <button
               onClick={onGetStarted}
-              className="bg-[#7C9070] text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#6b7d61] transition-all"
+              className="bg-[#7C9070] text-white px-4 py-2.5 rounded-full font-bold text-sm hover:bg-[#6b7d61] transition-all border border-transparent hover:border-slate-200"
             >
-              Sign In
+              Login
             </button>
           </div>
         </div>
@@ -126,7 +136,7 @@ const LandingPage = ({ onGetStarted }) => {
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
-            <div className="scroll-animate inline-block px-4 py-2 bg-transparent border border-[#1A3C40]/20 rounded-full text-[#1A3C40] font-medium text-sm">
+            <div className="scroll-animate inline-block px-4 py-2 bg-[#E7DCAC] border-[#1A3C40]/20 rounded-full text-[#1A3C40] font-medium text-sm">
               Family Medical Center in San Francisco
             </div>
             <h1 className="scroll-animate delay-100 text-7xl lg:text-[85px] font-serif font-medium leading-[1.05] text-[#1A3C40]">
@@ -142,7 +152,7 @@ const LandingPage = ({ onGetStarted }) => {
               >
                 Book an Appointment
               </button>
-              <a href="#about" className="flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg border-2 border-[#1A3C40]/20 hover:border-[#7C9070] transition-all text-[#1A3C40]">
+              <a href="#about" className="flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg hover:bg-[#d8cc9c] transition-all shadow-lg bg-[#E7DCAC] border-[#1A3C40]/20">
                 Learn more
               </a>
             </div>
