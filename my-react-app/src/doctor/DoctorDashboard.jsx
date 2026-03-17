@@ -14,39 +14,18 @@ import MedicalHistory from './sections/MedicalHistory';
 const DoctorDashboard = ({ user, onLogout }) => {
   const [currentTab, setCurrentTab] = useState('My dashboard');
 
-  const patientQueue = [
-    { initials: 'VS', name: 'Vikram Shah', details: '10:00 • Chest pain, ECG abnormal', status: 'Critical', color: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' },
-    { initials: 'PM', name: 'Priya Mehta', details: '10:15 • Follow-up • Hypertension', status: 'Checked in', color: 'bg-green-100', text: 'text-green-700', dot: 'bg-yellow-500' },
-    { initials: 'RK', name: 'Rahul Kumar', details: '10:30 • New patient • Palpitations', status: 'Scheduled', color: 'bg-slate-200', text: 'text-slate-800', dot: 'bg-teal-500' },
-    { initials: 'NK', name: 'Neha Kapoor', details: '11:00 • Post-op review', status: 'Scheduled', color: 'bg-slate-200', text: 'text-slate-800', dot: 'bg-purple-500' },
-    { initials: 'AS', name: 'Anil Sharma', details: '11:30 • Diabetes + cardiac risk', status: 'Lab pending', color: 'bg-yellow-100', text: 'text-yellow-700', dot: 'bg-green-500' },
-  ];
+  const patientQueue = [];
 
-  const prescriptions = [
-    { drug: 'Metoprolol 25mg', patient: 'Priya Mehta', details: '1 tab twice daily • 30 days', status: 'Signed', color: 'bg-transparent', text: 'text-slate-600', dot: 'bg-purple-400' },
-    { drug: 'Atorvastatin 40mg', patient: 'Anil Sharma', details: '1 tab at night • 60 days • Awaiting sign-off', status: 'Pending', color: 'bg-yellow-100', text: 'text-yellow-700', dot: 'bg-orange-400' },
-    { drug: 'Losartan 50mg', patient: 'Neha Kapoor', details: '1 tab daily • 90 days', status: 'Signed', color: 'bg-transparent', text: 'text-slate-600', dot: 'bg-green-400' },
-    { drug: 'Heparin IV', patient: 'Vikram Shah', details: '5000 IU stat • Emergency order', status: 'Urgent', color: 'bg-red-100', text: 'text-red-700', dot: 'bg-blue-400' },
-  ];
+  const prescriptions = [];
 
-  const labs = [
-    { patient: 'Vikram Shah', test: 'Troponin I', result: '0.8 ng/mL', flag: 'High', color: 'bg-red-100 text-red-700' },
-    { patient: 'Anil Sharma', test: 'HbA1c', result: '8.4%', flag: 'Elevated', color: 'bg-yellow-100 text-yellow-700' },
-    { patient: 'Priya Mehta', test: 'INR', result: '2.1', flag: 'Normal', color: 'bg-green-100 text-green-700' },
-    { patient: 'Rahul Kumar', test: 'Chest X-ray', result: 'Clear', flag: 'Normal', color: 'bg-green-100 text-green-700' },
-    { patient: 'Neha Kapoor', test: 'Lipid panel', result: 'LDL 142', flag: 'Borderline', color: 'bg-yellow-100 text-yellow-700' },
-  ];
+  const labs = [];
 
-  const referrals = [
-    { patient: 'Vikram Shah', to: 'ICU / Cardio', reason: 'NSTEMI w/' },
-    { patient: 'Anil Sharma', to: 'Endocrinology', reason: 'DM manageme' },
-    { patient: 'Rahul Kumar', to: 'Electrophysiology', reason: 'Palpitation' },
-  ];
+  const referrals = [];
 
   const renderContent = () => {
     switch(currentTab) {
       case 'My dashboard': return <MyDashboard patientQueue={patientQueue} prescriptions={prescriptions} labs={labs} referrals={referrals} />;
-      case "Today's patients": return <TodaysPatients />;
+      case "Today's patients": return <TodaysPatients user={user} />;
       case 'My schedule': return <MySchedule />;
       case 'Patient search': return <PatientSearch />;
       case 'Write notes': return <WriteNotes />;

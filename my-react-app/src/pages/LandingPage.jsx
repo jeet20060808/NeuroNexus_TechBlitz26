@@ -248,16 +248,24 @@ const LandingPage = ({ onGetStarted }) => {
           <div className="scroll-animate inline-block px-4 py-1.5 bg-white/10 rounded-full text-sm font-medium mb-8">
             Services
           </div>
-          <h2 className="scroll-animate delay-100 text-5xl font-serif mb-16">Your personalized care solutions</h2>
+          <h2 className="scroll-animate delay-100 text-5xl font-serif mb-6">Your personalized care solutions</h2>
+          <p className="scroll-animate delay-150 text-slate-300 text-lg mb-16 max-w-2xl leading-relaxed">
+            At Healio, we believe healthcare should be as unique as you are. Our multidisciplinary approach 
+            combines advanced diagnostics with a deep understanding of your personal health journey to 
+            deliver care that truly resonates.
+          </p>
 
           <div className="flex flex-col border-t border-white/20">
             {[
-              { id: '01', title: 'Family care', desc: 'Comprehensive health services for all ages, from newborns to seniors.' },
-              { id: '02', title: 'Pediatric care', desc: 'Specialized medical attention tailored specifically for children.' },
-              { id: '03', title: 'Vaccinations', desc: 'Stay protected with our complete immunization programs.' },
-              { id: '04', title: 'Preventive care', desc: 'Proactive checkups and screenings to keep you healthy.' },
-              { id: '05', title: 'Acute care', desc: 'Immediate attention for urgent, non-emergency health needs.' },
-              { id: '06', title: 'Chronic disease management', desc: 'Ongoing support for diabetes, hypertension, and more.' },
+              { id: '01', title: 'Family care', desc: 'Comprehensive health services for all ages, from newborns to seniors, focusing on long-term wellness.' },
+              { id: '02', title: 'Pediatric care', desc: 'Specialized medical attention tailored specifically for children in a gentle and friendly environment.' },
+              { id: '03', title: 'Vaccinations', desc: 'Stay protected with our complete immunization programs for travel, school, and seasonal wellness.' },
+              { id: '04', title: 'Preventive care', desc: 'Proactive checkups, screenings, and early detection programs to keep you and your family healthy.' },
+              { id: '05', title: 'Acute care', desc: 'Immediate attention for urgent, non-emergency health needs, ensuring quick recovery and peace of mind.' },
+              { id: '06', title: 'Chronic management', desc: 'Ongoing, personalized support for diabetes, hypertension, and other long-term health conditions.' },
+              { id: '07', title: 'Women\'s health', desc: 'Dedicated care for women at every stage of life, from prenatal support to specialized screenings.' },
+              { id: '08', title: 'Advanced diagnostics', desc: 'State-of-the-art imaging and laboratory services for fast, precise, and reliable health insights.' },
+              { id: '09', title: 'Mental wellness', desc: 'Compassionate counseling and support focusing on emotional health as a core part of your well-being.' },
             ].map((service, i) => (
               <div
                 key={service.id}
@@ -287,14 +295,14 @@ const LandingPage = ({ onGetStarted }) => {
               bg: 'bg-[#4A3728]', 
               text: 'text-white', 
               label: 'Holistic care', 
-              sub: 'Mind, body and spirit',
+              sub: 'Treating the whole person, not just the symptoms.',
               image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800'
             },
             { 
               bg: 'bg-[#D9D9D9]', 
               text: 'text-[#1A3C40]', 
               label: 'Personalized plans', 
-              sub: 'Tailored to you',
+              sub: 'Care roadmaps built around your unique biology and lifestyle.',
               image: 'https://images.unsplash.com/photo-1666886573531-48d2e3c2b684?auto=format&fit=crop&q=80&w=800'
             },
             { 
@@ -347,6 +355,53 @@ const LandingPage = ({ onGetStarted }) => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── PERSONALIZED CARE PROCESS ── */}
+      <section className="bg-white py-24 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="scroll-animate-left">
+              <div className="scroll-animate inline-block px-4 py-1.5 bg-[#7C9070]/10 rounded-full text-sm font-medium mb-8 text-[#7C9070]">
+                Our Process
+              </div>
+              <h2 className="text-5xl font-serif text-[#1A3C40] mb-8 leading-tight"> How we personalize <br/>your care journey</h2>
+              
+              <div className="space-y-10">
+                {[
+                  { step: '01', title: 'Deep Discovery', desc: 'We start with a comprehensive health assessment that goes beyond symptoms to understand your lifestyle, genetics, and goals.' },
+                  { step: '02', title: 'Data-Driven Insights', desc: 'Our advanced diagnostics provide a clear roadmap of your health markers, allowing for precision in every recommendation.' },
+                  { step: '03', title: 'Tailored Treatment', desc: 'Your care plan is uniquely yours, evolving with you as your health needs and lifestyle change over time.' },
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-6">
+                    <div className="text-3xl font-serif text-[#7C9070] opacity-30 mt-1">{item.step}</div>
+                    <div>
+                      <h3 className="text-xl font-bold text-[#1A3C40] mb-2">{item.title}</h3>
+                      <p className="text-slate-500 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="scroll-animate-right relative">
+              <div className="rounded-[40px] overflow-hidden shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=800" 
+                  alt="Doctor with tablet" 
+                  className="w-full h-[650px] object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-10 -left-10 bg-[#1A3C40] text-white p-8 rounded-3xl shadow-xl max-w-xs">
+                <p className="text-lg font-serif mb-4">"The care plan I received was the first one that actually fit my busy life."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#E7DCAC]" />
+                  <span className="text-sm font-medium opacity-80">Sarah J., Patient</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

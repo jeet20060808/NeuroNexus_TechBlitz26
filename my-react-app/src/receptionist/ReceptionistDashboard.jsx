@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut } from 'lucide-react';
+import {api} from '../api';
 import Overview from './sections/Overview';
 import TodaysQueue from './sections/TodaysQueue';
 import RegisterNew from './sections/RegisterNew';
@@ -40,52 +41,60 @@ const useLocalStorage = (key, initialValue) => {
 
 const ReceptionistDashboard = ({ user, onLogout }) => {
   const [currentTab, setCurrentTab] = useState('Overview');
-  const [patients, setPatients] = useLocalStorage('clinic_patients', [
-    { id: 1, name: 'Alice Johnson', phone: '+1-555-0101', email: 'alice@email.com', blood_group: 'O+', visits: 5, lastVisit: '2026-03-13', insurance: 'Blue Cross' },
-    { id: 2, name: 'Bob Smith', phone: '+1-555-0102', email: 'bob@email.com', blood_group: 'A-', visits: 3, lastVisit: '2026-03-13', insurance: 'Aetna' },
-    { id: 3, name: 'Carol White', phone: '+1-555-0103', email: 'carol@email.com', blood_group: 'B+', visits: 2, lastVisit: '2026-03-12', insurance: 'Cigna' },
-  ]);
+  const [patients, setPatients] = useState([]);
   const [registerForm, setRegisterForm] = useState({ firstName: '', lastName: '', doctor: '', time: '' });
 
-  const handleAddPatient = (e) => {
-    e.preventDefault();
-    if (!registerForm.firstName) return;
+const [doctors, setDoctors] = useState([]);
 
-    const initials = (registerForm.firstName[0] + (registerForm.lastName?.[0] || '')).toUpperCase();
-    const fullName = `${registerForm.firstName} ${registerForm.lastName}`;
-    const assignedTime = registerForm.time || new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+   // useEffect - load patients & doctors
+useEffect(() => {
+  api.getPatients()
+    .then(data => setPatients(data.patients || []))
+    .catch(err => console.error("Failed to load patients:", err));
 
-    const newPatient = {
-      id: `P-00${Math.floor(Math.random() * 90 + 10)}`,
-      initials,
+  if (user?.clinic_id) {
+    api.getClinicDoctors(user.clinic_id)
+      .then(data => setDoctors(data || []))
+      .catch(err => console.error("Failed to load doctors:", err));
+  }
+}, [user?.clinic_id]);
+
+// handleAddPatient
+const handleAddPatient = async (e) => {
+  e.preventDefault();
+  if (!registerForm.firstName) return;
+
+  const fullName = `${registerForm.firstName} ${registerForm.lastName}`.trim();
+
+  try {
+    const newPatient = await api.createPatient({
       name: fullName,
-      age: Math.floor(Math.random() * 60) + 18,
-      phone: '+91 98200 ' + Math.floor(10000 + Math.random() * 90000),
-      lastVisit: 'Today',
-      details: `${assignedTime} • Walk-in`,
-      doctor: registerForm.doctor || 'Unassigned',
-      time: assignedTime,
-      status: 'Active',
-      queueStatus: 'Scheduled',
-      color: 'bg-slate-200',
-      text: 'text-slate-800',
-      dot: 'bg-blue-400'
-    };
+      phone: "",
+      clinic_id: user?.clinic_id || null
+    });
 
-    setPatients([...patients, newPatient]);
+    if (registerForm.doctor && registerForm.time) {
+      await api.createAppointment({
+        patient_id: newPatient.id,
+        doctor_id: registerForm.doctor,
+        appointment_date: new Date().toISOString().split('T')[0],
+        start_time: registerForm.time,
+        clinic_id: user?.clinic_id || null
+      });
+    }
+
+    setPatients(prev => [...prev, newPatient]);
     setRegisterForm({ firstName: '', lastName: '', doctor: '', time: '' });
     setCurrentTab('Search Patient');
-  };
-
+  } catch (err) {
+    console.error("Failed to register patient:", err);
+  }
+};
   const handleDeletePatient = (id) => {
     setPatients(patients.filter(p => p.id !== id));
   };
 
-  const doctorStatus = [
-    { name: 'Dr. Mehta', spec: 'General', room: '101', status: 'In Consult', color: 'bg-red-100 text-red-700' },
-    { name: 'Dr. Singh', spec: 'Cardiology', room: '203', status: 'Available', color: 'bg-green-100 text-green-700' },
-    { name: 'Dr. Patel', spec: 'Orthopedics', room: '105', status: 'Delayed', color: 'bg-yellow-100 text-yellow-700' },
-  ];
+  const doctorStatus = [];
 
   const renderSidebarItem = (tabName, dotColor) => (
     <li 
@@ -99,27 +108,27 @@ const ReceptionistDashboard = ({ user, onLogout }) => {
   const renderContent = () => {
     switch (currentTab) {
       case 'Overview':
-        return <Overview patients={patients} doctorStatus={doctorStatus} />;
+        return <Overview patients={patients} doctors={doctors} />;
       case "Today's Queue":
         return <TodaysQueue patients={patients} />;
       case 'Register New':
-        return <RegisterNew registerForm={registerForm} setRegisterForm={setRegisterForm} handleAddPatient={handleAddPatient} setCurrentTab={setCurrentTab} />;
+        return <RegisterNew registerForm={registerForm} setRegisterForm={setRegisterForm} handleAddPatient={handleAddPatient} setCurrentTab={setCurrentTab} doctors={doctors} />;
       case 'Search Patient':
         return <SearchPatient patients={patients} handleDeletePatient={handleDeletePatient} />;
       case 'Records & History':
         return <RecordsHistory />;
       case 'Book Appointment':
-        return <BookAppointment setCurrentTab={setCurrentTab} />;
+        return <BookAppointment setCurrentTab={setCurrentTab} doctors={doctors} />;
       case 'View Schedule':
         return <ViewSchedule patients={patients} />;
       case 'Cancellations':
         return <Cancellations />;
       case 'Availability':
-        return <Availability />;
+        return <Availability doctors={doctors} />;
       case 'On-Call Roster':
         return <OnCallRoster />;
       default:
-        return <Overview patients={patients} doctorStatus={doctorStatus} />;
+        return <Overview patients={patients} doctors={doctors} />;
     }
   };
 

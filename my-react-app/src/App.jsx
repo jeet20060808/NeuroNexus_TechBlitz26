@@ -3,7 +3,6 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import ReceptionistDashboard from './receptionist/ReceptionistDashboard';
 import DoctorDashboard from './doctor/DoctorDashboard';
-
 // ============== CUSTOM HOOKS ==============
 const useOnlineStatus = () => {
   const [isOnline, setIsOnline] = useState(typeof window !== 'undefined' ? navigator.onLine : true);
@@ -100,7 +99,7 @@ export default function ClinicApp() {
       </div>
 
       {view === 'landing' && <LandingPage onGetStarted={() => setView('login')} />}
-      {view === 'login' && <LoginPage onLogin={handleLogin} />}
+      {view === 'login' && <LoginPage onLogin={handleLogin} onBack={() => setView('landing')} />}
       
       {view === 'dashboard' && user?.role === 'receptionist' && (
         <ReceptionistDashboard user={user} onLogout={handleLogout} />

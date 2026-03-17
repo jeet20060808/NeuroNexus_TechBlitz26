@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Overview = ({ patients, doctorStatus }) => {
+const Overview = ({ patients, doctors = [] }) => {
   return (
     <div className="animate-in fade-in">
       <div className="grid grid-cols-4 gap-6 mb-6">
@@ -16,8 +16,8 @@ const Overview = ({ patients, doctorStatus }) => {
         </div>
         <div className="bg-white p-4 rounded-xl border border-[#7C9070]/20 shadow-sm">
           <p className="text-slate-600 text-sm mb-1">Doctors On Duty</p>
-          <h2 className="text-3xl text-[#1A3C40] font-semibold mb-1">5</h2>
-          <p className="text-slate-500 text-xs">2 in consult</p>
+          <h2 className="text-3xl text-[#1A3C40] font-semibold mb-1">{doctors.length}</h2>
+          <p className="text-slate-500 text-xs">{doctors.filter(d => d.status === 'in consult').length} in consult</p>
         </div>
         <div className="bg-white p-4 rounded-xl border border-[#7C9070]/20 shadow-sm">
           <p className="text-slate-600 text-sm mb-1">Walk-ins Today</p>
@@ -26,7 +26,7 @@ const Overview = ({ patients, doctorStatus }) => {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-5 space-y-6">
+        <div className="col-span-12 lg:col-span-5 space-y-6">
           <div className="bg-white rounded-xl border border-[#7C9070]/20 shadow-sm overflow-hidden">
             <div className="flex justify-between items-center p-4 border-b border-[#7C9070]/10">
               <h3 className="font-semibold text-[#1A3C40]">Today's queue</h3>
@@ -44,7 +44,7 @@ const Overview = ({ patients, doctorStatus }) => {
                       </div>
                       <div>
                         <p className="text-[#1A3C40] font-medium text-sm">{q.name}</p>
-                        <p className="text-slate-500 text-xs">{q.doctor || 'Unassigned'} • {q.time || 'N/A'}</p>
+                        <p className="text-slate-500 text-xs">{q.doctor_name || q.doctor || 'Unassigned'} • {q.time || 'N/A'}</p>
                       </div>
                     </div>
                     <span className={`${q.color === 'bg-slate-200' ? 'bg-[#7C9070]/10 text-[#7C9070]' : q.color} ${q.text || 'text-slate-800'} text-[10px] px-2 py-1 rounded font-bold`}>
@@ -56,33 +56,43 @@ const Overview = ({ patients, doctorStatus }) => {
             </div>
           </div>
         </div>
-        <div className="col-span-7 space-y-6">
+        <div className="col-span-12 lg:col-span-7 space-y-6">
           <div className="bg-white rounded-xl border border-[#7C9070]/20 shadow-sm p-4">
-            <h3 className="font-semibold text-[#1A3C40] mb-4">Doctor status</h3>
-            <table className="w-full text-sm text-left">
-              <thead>
-                <tr className="text-slate-500 border-b border-[#7C9070]/10">
-                  <th className="pb-2 font-medium">Doctor</th>
-                  <th className="pb-2 font-medium">Specialty</th>
-                  <th className="pb-2 font-medium">Room</th>
-                  <th className="pb-2 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {doctorStatus.map((doc, idx) => (
-                  <tr key={idx} className="border-b border-slate-50 last:border-0">
-                    <td className="py-3 text-[#1A3C40] font-medium">{doc.name}</td>
-                    <td className="py-3 text-slate-600">{doc.spec}</td>
-                    <td className="py-3 text-slate-600">{doc.room}</td>
-                    <td className="py-3">
-                      <span className={`${doc.color} text-[10px] px-2 py-1 rounded font-bold`}>
-                        {doc.status}
-                      </span>
-                    </td>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-semibold text-[#1A3C40]">Doctor status</h3>
+              <span className="text-[11px] text-[#7C9070] font-bold uppercase tracking-wider">Live Updates</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead>
+                  <tr className="text-slate-500 border-b border-[#7C9070]/10">
+                    <th className="pb-2 font-medium">Doctor</th>
+                    <th className="pb-2 font-medium">Specialty</th>
+                    <th className="pb-2 font-medium">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {doctors.length === 0 ? (
+                    <tr><td colSpan="3" className="py-4 text-center text-slate-400 italic text-sm">No doctors registered in this clinic yet.</td></tr>
+                  ) : (
+                    doctors.map((doc, idx) => (
+                      <tr key={idx} className="border-b border-slate-50 last:border-0 hover:bg-[#7C9070]/5 transition-colors">
+                        <td className="py-3 text-[#1A3C40] font-bold">{doc.name}</td>
+                        <td className="py-3 text-slate-600 text-xs font-medium uppercase tracking-tight">{doc.specialization || "General"}</td>
+                        <td className="py-3">
+                          <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold shadow-sm ${
+                            doc.status === 'available' ? 'bg-[#7C9070]/10 text-[#7C9070]' : 
+                            doc.status === 'in consult' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-500'
+                          }`}>
+                            {doc.status || "offline"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

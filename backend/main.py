@@ -5,6 +5,14 @@ from datetime import datetime
 from typing import List, Optional
 from jose import jwt
 import time
+import uuid
+import bcrypt
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+def verify_password(password: str, hashed: str) -> bool:
+    return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
 # Internal imports
 from database import engine, SessionLocal, get_db, Base
@@ -23,7 +31,7 @@ app = FastAPI(title="ClinicOS API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,6 +40,53 @@ app.add_middleware(
 # Initial Data Seeding
 @app.on_event("startup")
 def seed_data():
+    db = SessionLocal()
+    try:
+        # Check if data already exists — if yes, skip everything
+        existing = db.query(models.Clinic).filter_by(clinic_key="demo-clinic").first()
+        if existing:
+            return  # ← already seeded, do nothing
+
+        # Create demo clinic
+        clinic = models.Clinic(
+            id=str(uuid.uuid4()),
+            name="Demo Clinic",
+            clinic_key="demo-clinic"
+        )
+        db.add(clinic)
+        db.commit()
+
+        # Create receptionist
+        receptionist = models.User(
+            id=str(uuid.uuid4()),
+            name="Clinic Admin",
+            email="demo@clinic.com",
+            password_hash=hash_password("demo1234"),
+            role="receptionist",
+            clinic_id=clinic.id
+        )
+
+        # Create doctor
+        doctor = models.User(
+            id=str(uuid.uuid4()),
+            name="Dr. Smith",
+            email="doctor@clinic.com",
+            password_hash=hash_password("demo1234"),
+            role="doctor",
+            clinic_id=clinic.id,
+            specialization="Cardiology"
+        )
+
+        db.add(receptionist)
+        db.add(doctor)
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        print(f"Seed error: {e}")
+    finally:
+        db.close()
+
     db = SessionLocal()
     if db.query(models.User).count() == 0:
         # Create Demo User
@@ -77,18 +132,22 @@ def seed_data():
 # Routes
 @app.post("/api/auth/login")
 def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.email == req.email, models.User.password == req.password).first()
-    if not user:
+    user = db.query(models.User).filter(models.User.email == req.email).first()
+    if not user or not verify_password(req.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    
-    token = jwt.encode({"sub": user.email, "role": user.role, "exp": time.time() + 3600}, SECRET_KEY, algorithm=ALGORITHM)
+
+    token = jwt.encode(
+        {"sub": user.email, "role": user.role, "exp": time.time() + 3600},
+        SECRET_KEY, algorithm=ALGORITHM
+    )
     return {
         "token": token,
         "user": {
             "id": user.id,
             "name": user.name,
             "email": user.email,
-            "role": user.role
+            "role": user.role,
+            "clinic_id": user.clinic_id
         }
     }
 
@@ -193,6 +252,101 @@ def create_bill(bill: schemas.BillCreate, db: Session = Depends(get_db)):
 def get_appointment_bill(appointment_id: int, db: Session = Depends(get_db)):
     bill = db.query(models.Bill).filter(models.Bill.appointment_id == appointment_id).first()
     return bill
+
+# ── RECEPTIONIST SIGNUP ──────────────────────────
+@app.post("/auth/signup/receptionist")
+def receptionist_signup(data: schemas.ReceptionistSignup, db: Session = Depends(get_db)):
+    clinic_key = data.clinic_name.lower().replace(" ", "-")
+
+    clinic = db.query(models.Clinic).filter_by(clinic_key=clinic_key).first()
+    if not clinic:
+        clinic = models.Clinic(
+            id=str(uuid.uuid4()),
+            name=data.clinic_name,
+            clinic_key=clinic_key
+        )
+        db.add(clinic)
+        db.commit()
+        db.refresh(clinic)
+
+    user = models.User(
+        id=str(uuid.uuid4()),
+        name=data.name,
+        email=data.email,
+        password_hash=hash_password(data.password),
+        role="receptionist",
+        clinic_id=clinic.id,
+        phone=data.phone,
+        designation=data.designation
+    )
+    db.add(user)
+    db.commit()
+
+    token = jwt.encode(
+        {"sub": user.email, "role": user.role, "exp": time.time() + 3600},
+        SECRET_KEY, algorithm=ALGORITHM
+    )
+    return {"token": token, "role": user.role, "clinic_id": clinic.id, "name": user.name, "id": user.id}
+
+
+@app.post("/auth/signup/doctor")
+def doctor_signup(data: schemas.DoctorSignup, db: Session = Depends(get_db)):
+    clinic_key = data.clinic_name.lower().replace(" ", "-")
+
+    clinic = db.query(models.Clinic).filter_by(clinic_key=clinic_key).first()
+    if not clinic:
+        raise HTTPException(status_code=404,
+            detail="Clinic not found. Make sure clinic name exactly matches your receptionist's.")
+
+    user = models.User(
+        id=str(uuid.uuid4()),
+        name=data.name,
+        email=data.email,
+        password_hash=hash_password(data.password),
+        role="doctor",
+        clinic_id=clinic.id,
+        specialization=data.specialization,
+        license_no=data.license_no,
+        phone=data.phone
+    )
+    db.add(user)
+    db.commit()
+
+    token = jwt.encode(
+        {"sub": user.email, "role": user.role, "exp": time.time() + 3600},
+        SECRET_KEY, algorithm=ALGORITHM
+    )
+    return {"token": token, "role": user.role, "clinic_id": clinic.id, "name": user.name, "id": user.id}
+
+@app.get("/api/doctors/patients/{doctor_id}")
+def get_doctor_patients(doctor_id: str, db: Session = Depends(get_db)):
+    appointments = db.query(models.Appointment).filter(models.Appointment.doctor_id == doctor_id).all()
+    patients = []
+    seen_patient_ids = set()
+    for apt in appointments:
+        if apt.patient_id not in seen_patient_ids:
+            patients.append(apt.patient)
+            seen_patient_ids.add(apt.patient_id)
+    return {"patients": patients}
+
+
+
+# ── GET DOCTORS IN CLINIC ─────────────────────────
+@app.get("/clinic/doctors")
+def get_clinic_doctors(clinic_id: str, db: Session = Depends(get_db)):
+    doctors = db.query(models.User).filter_by(clinic_id=clinic_id, role="doctor").all()
+    return [{"id": d.id, "name": d.name, "specialization": d.specialization, "status": d.status} for d in doctors]
+
+
+# ── UPDATE DOCTOR STATUS ──────────────────────────
+@app.patch("/users/{user_id}/status")
+def update_user_status(user_id: str, status: str, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter_by(id=user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.status = status
+    db.commit()
+    return {"message": "Status updated", "status": status}
 
 if __name__ == "__main__":
     import uvicorn
