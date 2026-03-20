@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:yourpassword@localhost/healio"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:nirja0987@localhost/healio"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

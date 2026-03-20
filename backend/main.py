@@ -186,13 +186,30 @@ def get_appointments(date: Optional[str] = None, db: Session = Depends(get_db)):
             "start_time": apt.start_time,
             "duration_minutes": apt.duration_minutes,
             "status": apt.status,
-            "patient_name": apt.patient.name,
+            "patient_name": f"{apt.patient.first_name} {apt.patient.last_name}",
+            "first_name": apt.patient.first_name,
+            "last_name": apt.patient.last_name,
+            "address": apt.patient.address,
+            "emergency_contact": apt.patient.emergency_contact,
+            "dob": apt.patient.dob,
+            "gender": apt.patient.gender,
+            "blood_group": apt.patient.blood_group,
             "doctor_name": apt.doctor.name,
             "medical_history": apt.patient.medical_history,
             "allergies": apt.patient.allergies,
-            "phone": apt.patient.phone
+            "phone": apt.patient.phone,
+            "email": apt.patient.email
         })
     return {"appointments": result}
+
+@app.patch("/api/appointments/{id}/status")
+def update_appointment_status(id: str, data: schemas.AppointmentStatusUpdate, db: Session = Depends(get_db)):
+    db_apt = db.query(models.Appointment).filter(models.Appointment.id == id).first()
+    if not db_apt:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    db_apt.status = data.status
+    db.commit()
+    return {"message": "Status updated", "status": data.status}
 
 @app.post("/api/appointments")
 def create_appointment(apt: schemas.AppointmentCreate, db: Session = Depends(get_db)):
@@ -252,6 +269,30 @@ def create_bill(bill: schemas.BillCreate, db: Session = Depends(get_db)):
 def get_appointment_bill(appointment_id: int, db: Session = Depends(get_db)):
     bill = db.query(models.Bill).filter(models.Bill.appointment_id == appointment_id).first()
     return bill
+
+# Clinical Notes Routes
+@app.post("/api/notes")
+def create_note(note: schemas.ClinicalNoteCreate, db: Session = Depends(get_db)):
+    db_note = models.ClinicalNote(**note.dict())
+    db.add(db_note)
+    db.commit()
+    db.refresh(db_note)
+    return db_note
+
+@app.get("/api/notes/{appointment_id}")
+def get_notes(appointment_id: str, db: Session = Depends(get_db)):
+    notes = db.query(models.ClinicalNote).filter(models.ClinicalNote.appointment_id == appointment_id).all()
+    return {"notes": notes}
+
+@app.post("/api/send-report")
+def send_report(req: schemas.EmailRequest, db: Session = Depends(get_db)):
+    # In a real app, you would use a library like fastapi-mail here.
+    # For this demo, we'll simulate a successful send.
+    print(f"MOCK EMAIL: Sending report to {req.email} for patient {req.patient_name}")
+    # Simulate processing time
+    time.sleep(1)
+    return {"message": "Report sent successfully to " + req.email}
+
 
 # ── RECEPTIONIST SIGNUP ──────────────────────────
 @app.post("/auth/signup/receptionist")

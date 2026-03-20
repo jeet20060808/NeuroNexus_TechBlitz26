@@ -18,13 +18,6 @@ const NAV_GROUPS = [
     items: [
       { label: 'Write notes', dot: 'bg-gray-500' },
       { label: 'Prescriptions', dot: 'bg-gray-500' },
-      { label: 'Referrals', dot: 'bg-gray-500' },
-    ],
-  },
-  {
-    group: 'Records',
-    items: [
-      { label: 'Medical history', dot: 'bg-gray-500' },
     ],
   },
 ];

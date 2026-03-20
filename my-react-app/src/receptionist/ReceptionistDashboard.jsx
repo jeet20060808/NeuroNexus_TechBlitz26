@@ -42,7 +42,19 @@ const useLocalStorage = (key, initialValue) => {
 const ReceptionistDashboard = ({ user, onLogout }) => {
   const [currentTab, setCurrentTab] = useState('Overview');
   const [patients, setPatients] = useState([]);
-  const [registerForm, setRegisterForm] = useState({ firstName: '', lastName: '', doctor: '', time: '' });
+  const [appointments, setAppointments] = useState([]);
+  const [registerForm, setRegisterForm] = useState({ 
+    firstName: '', 
+    lastName: '', 
+    phone: '', 
+    email: '', 
+    dob: '', 
+    address: '', 
+    bloodGroup: '', 
+    doctor: '', 
+    time: '',
+    emergencyContact: ''
+  });
 
 const [doctors, setDoctors] = useState([]);
 
@@ -52,24 +64,33 @@ useEffect(() => {
     .then(data => setPatients(data.patients || []))
     .catch(err => console.error("Failed to load patients:", err));
 
+  const today = new Date().toISOString().split('T')[0];
+  api.getAppointments(today)
+    .then(data => setAppointments(data.appointments || []))
+    .catch(err => console.error("Failed to load appointments:", err));
+
   if (user?.clinic_id) {
     api.getClinicDoctors(user.clinic_id)
       .then(data => setDoctors(data || []))
       .catch(err => console.error("Failed to load doctors:", err));
   }
-}, [user?.clinic_id]);
+}, [user?.clinic_id, currentTab]); // Re-fetch on tab change to get status updates from doctor
 
 // handleAddPatient
 const handleAddPatient = async (e) => {
   e.preventDefault();
-  if (!registerForm.firstName) return;
-
-  const fullName = `${registerForm.firstName} ${registerForm.lastName}`.trim();
+  if (!registerForm.firstName || !registerForm.lastName) return;
 
   try {
     const newPatient = await api.createPatient({
-      name: fullName,
-      phone: "",
+      first_name: registerForm.firstName,
+      last_name: registerForm.lastName,
+      phone: registerForm.phone,
+      email: registerForm.email,
+      dob: registerForm.dob,
+      address: registerForm.address,
+      blood_group: registerForm.bloodGroup,
+      emergency_contact: registerForm.emergencyContact,
       clinic_id: user?.clinic_id || null
     });
 
@@ -79,15 +100,21 @@ const handleAddPatient = async (e) => {
         doctor_id: registerForm.doctor,
         appointment_date: new Date().toISOString().split('T')[0],
         start_time: registerForm.time,
+        status: "REMAINING", // Default status
         clinic_id: user?.clinic_id || null
       });
     }
 
     setPatients(prev => [...prev, newPatient]);
-    setRegisterForm({ firstName: '', lastName: '', doctor: '', time: '' });
+    setRegisterForm({ 
+      firstName: '', lastName: '', phone: '', email: '', dob: '', 
+      address: '', bloodGroup: '', doctor: '', time: '', emergencyContact: '' 
+    });
     setCurrentTab('Search Patient');
+    alert("Patient registered successfully!");
   } catch (err) {
     console.error("Failed to register patient:", err);
+    alert("Registration failed. Please try again.");
   }
 };
   const handleDeletePatient = (id) => {
@@ -108,9 +135,9 @@ const handleAddPatient = async (e) => {
   const renderContent = () => {
     switch (currentTab) {
       case 'Overview':
-        return <Overview patients={patients} doctors={doctors} />;
+        return <Overview appointments={appointments} doctors={doctors} />;
       case "Today's Queue":
-        return <TodaysQueue patients={patients} />;
+        return <TodaysQueue appointments={appointments} />;
       case 'Register New':
         return <RegisterNew registerForm={registerForm} setRegisterForm={setRegisterForm} handleAddPatient={handleAddPatient} setCurrentTab={setCurrentTab} doctors={doctors} />;
       case 'Search Patient':

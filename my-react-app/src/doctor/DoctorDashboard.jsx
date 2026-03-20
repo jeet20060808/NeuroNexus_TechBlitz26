@@ -8,8 +8,6 @@ import MySchedule from './sections/MySchedule';
 import PatientSearch from './sections/PatientSearch';
 import WriteNotes from './sections/WriteNotes';
 import Prescriptions from './sections/Prescriptions';
-import ReferralsSection from './sections/Referrals';
-import MedicalHistory from './sections/MedicalHistory';
 
 const DoctorDashboard = ({ user, onLogout }) => {
   const [currentTab, setCurrentTab] = useState('My dashboard');
@@ -24,14 +22,12 @@ const DoctorDashboard = ({ user, onLogout }) => {
 
   const renderContent = () => {
     switch(currentTab) {
-      case 'My dashboard': return <MyDashboard patientQueue={patientQueue} prescriptions={prescriptions} labs={labs} referrals={referrals} />;
+      case 'My dashboard': return <MyDashboard user={user} />;
       case "Today's patients": return <TodaysPatients user={user} />;
-      case 'My schedule': return <MySchedule />;
+      case 'My schedule': return <MySchedule user={user} />;
       case 'Patient search': return <PatientSearch />;
       case 'Write notes': return <WriteNotes />;
-      case 'Prescriptions': return <Prescriptions />;
-      case 'Referrals': return <ReferralsSection />;
-      case 'Medical history': return <MedicalHistory />;
+      case 'Prescriptions': return <Prescriptions user={user} />;
       default: return (
         <div className="p-16 flex flex-col items-center justify-center text-center h-full">
            <Stethoscope size={48} className="text-slate-400 mb-4" />

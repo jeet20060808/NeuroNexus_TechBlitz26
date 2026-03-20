@@ -45,17 +45,20 @@ class User(Base):
 class Patient(Base):
     __tablename__ = "patients"
 
-    id              = Column(String(100), primary_key=True, default=gen_id)
-    clinic_id       = Column(String(100), ForeignKey("clinics.id"), nullable=True)
-    name            = Column(String(200), nullable=False)
-    phone           = Column(String(20))
-    email           = Column(String(200))
-    dob             = Column(String(20))          # "YYYY-MM-DD"
-    gender          = Column(String(20))
-    blood_group     = Column(String(10))
-    medical_history = Column(Text)
-    allergies       = Column(Text)
-    created_at      = Column(DateTime, default=datetime.utcnow)
+    id                = Column(String(100), primary_key=True, default=gen_id)
+    clinic_id         = Column(String(100), ForeignKey("clinics.id"), nullable=True)
+    first_name        = Column(String(100), nullable=False)
+    last_name         = Column(String(100), nullable=False)
+    phone             = Column(String(20))
+    email             = Column(String(200))
+    dob               = Column(String(20))          # "YYYY-MM-DD"
+    gender            = Column(String(20))
+    blood_group       = Column(String(10))
+    address           = Column(Text)
+    emergency_contact = Column(String(200))
+    medical_history   = Column(Text)
+    allergies         = Column(Text)
+    created_at        = Column(DateTime, default=datetime.utcnow)
 
     appointments = relationship("Appointment", back_populates="patient")
     vitals       = relationship("VitalSign", back_populates="patient")
@@ -112,6 +115,25 @@ class Prescription(Base):
     created_at       = Column(DateTime, default=datetime.utcnow)
 
     appointment = relationship("Appointment", back_populates="prescriptions")
+
+
+class ClinicalNote(Base):
+    __tablename__ = "clinical_notes"
+
+    id                   = Column(String(100), primary_key=True, default=gen_id)
+    appointment_id       = Column(String(100), ForeignKey("appointments.id"), nullable=False)
+    doctor_id            = Column(String(100), ForeignKey("users.id"), nullable=False)
+    chief_complaint      = Column(Text)
+    examination_findings = Column(Text)
+    diagnosis            = Column(Text)
+    treatment_plan       = Column(Text)
+    medications          = Column(Text)
+    follow_up            = Column(Text)
+    note_text            = Column(Text) # Overall summary
+    created_at           = Column(DateTime, default=datetime.utcnow)
+
+    appointment = relationship("Appointment")
+    doctor      = relationship("User")
 
 
 class Bill(Base):

@@ -7,6 +7,12 @@ const post = (url, data) => fetch(BASE + url, {
   body: JSON.stringify(data)
 }).then(r => r.json());
 
+const patch = (url, data) => fetch(BASE + url, {
+  method: "PATCH",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(data)
+}).then(r => r.json());
+
 export const api = {
   login:               (data) => post("/api/auth/login", data),
   signupReceptionist:  (data) => post("/auth/signup/receptionist", data),
@@ -18,4 +24,8 @@ export const api = {
   createAppointment:   (data) => post("/api/appointments", data),
   getClinicDoctors:    (clinicId) => get(`/clinic/doctors?clinic_id=${clinicId}`),
   getDoctorPatients:   (doctorId) => get(`/api/doctors/patients/${doctorId}`),
+  getNotes:            (appointmentId) => get(`/api/notes/${appointmentId}`),
+  createNote:          (data) => post("/api/notes", data),
+  updateAppointmentStatus: (id, status) => patch(`/api/appointments/${id}/status`, { status }),
+  sendReport:           (data) => post("/api/send-report", data),
 };
